@@ -52,6 +52,7 @@ type commandFlags struct {
 	distinguishedName string
 	dnsSans           stringSlice
 	emailSans         emailSlice
+	uriSans           uriSlice
 	file              string
 	format            string
 	friendlyName      string

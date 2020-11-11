@@ -6,19 +6,21 @@ import (
 	"encoding/json"
 	"encoding/pem"
 	"fmt"
+	"io/ioutil"
+	"log"
+	"net"
+	"net/http"
+	"net/url"
+	"os"
+	"strings"
+	"time"
+
 	"github.com/Venafi/vcert"
 	"github.com/Venafi/vcert/pkg/certificate"
 	"github.com/Venafi/vcert/pkg/endpoint"
 	"github.com/Venafi/vcert/pkg/venafi/tpp"
 	"github.com/urfave/cli/v2"
 	"golang.org/x/crypto/pkcs12"
-	"io/ioutil"
-	"log"
-	"net"
-	"net/http"
-	"os"
-	"strings"
-	"time"
 )
 
 var (
@@ -100,6 +102,7 @@ func runBeforeCommand(c *cli.Context) error {
 	flags.orgUnits = c.StringSlice("ou")
 	flags.dnsSans = c.StringSlice("san-dns")
 	flags.emailSans = c.StringSlice("san-email")
+	// flags.uriSans = c.StringSlice("san-uri")
 	flags.customFields = c.StringSlice("field")
 
 	noDuplicatedFlags := []string{"instance", "tls-address", "app-info"}
@@ -122,6 +125,14 @@ func runBeforeCommand(c *cli.Context) error {
 	for _, stringIP := range c.StringSlice("san-ip") {
 		ip := net.ParseIP(stringIP)
 		flags.ipSans = append(flags.ipSans, ip)
+	}
+
+	for _, s := range c.StringSlice("san-uri") {
+		u, err := url.Parse(s)
+		if err != nil {
+			return fmt.Errorf("Failed to parse %s to a URL", s)
+		}
+		flags.uriSans = append(flags.uriSans, u)
 	}
 
 	return nil

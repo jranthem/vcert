@@ -2,10 +2,11 @@ package main
 
 import (
 	"fmt"
-	"github.com/Venafi/vcert/pkg/certificate"
 	"io/ioutil"
 	"regexp"
 	"strings"
+
+	"github.com/Venafi/vcert/pkg/certificate"
 )
 
 // RevocationReasonOptions is an array of strings containing reasons for certificate revocation
@@ -292,8 +293,8 @@ func validateGetcredFlags1(commandName string) error {
 	if err != nil {
 		return err
 	}
-	if flags.tppToken == "" && flags.tppUser == "" && flags.clientP12 == "" {
-		return fmt.Errorf("either -username, -p12-file, or -t must be specified")
+	if flags.tppToken == "" && flags.tppUser == "" && flags.clientP12 == "" && flags.config == "" {
+		return fmt.Errorf("one of -username, -p12-file, -t or -config must be specified")
 	}
 
 	err = validatePKCS12Flags(commandName)

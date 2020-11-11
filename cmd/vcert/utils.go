@@ -79,6 +79,9 @@ func fillCertificateRequest(req *certificate.Request, cf *commandFlags) *certifi
 	if len(cf.emailSans) > 0 {
 		req.EmailAddresses = cf.emailSans
 	}
+	if len(cf.uriSans) > 0 {
+		req.URIs = cf.uriSans
+	}
 	req.OmitSANs = cf.omitSans
 	for _, f := range cf.customFields {
 		k, v, err := parseCustomField(f)

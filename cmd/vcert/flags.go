@@ -1,9 +1,10 @@
 package main
 
 import (
-	"github.com/urfave/cli/v2"
 	"sort"
 	"strings"
+
+	"github.com/urfave/cli/v2"
 )
 
 var (
@@ -159,6 +160,12 @@ var (
 		Name: "san-email",
 		Usage: "Use to specify an Email Subject Alternative Name. " +
 			"This option can be repeated to specify more than one value, like this: --san-email abc@abc.xyz --san-email def@abc.xyz etc.",
+	}
+
+	flagURISans = &cli.StringSliceFlag{
+		Name: "san-uri",
+		Usage: "Use to specify an URI (e.g. spiffe://) " +
+			"This option can be repeated to specify more than one value.",
 	}
 
 	flagFormat = &cli.StringFlag{
@@ -425,7 +432,7 @@ var (
 
 	commonFlags              = []cli.Flag{flagInsecure, flagFormat, flagVerbose, flagNoPrompt}
 	keyFlags                 = []cli.Flag{flagKeyType, flagKeySize, flagKeyCurve, flagKeyFile, flagKeyPassword}
-	sansFlags                = []cli.Flag{flagDNSSans, flagEmailSans, flagIPSans}
+	sansFlags                = []cli.Flag{flagDNSSans, flagEmailSans, flagIPSans, flagURISans}
 	subjectFlags             = flagsApppend(flagCommonName, flagCountry, flagState, flagLocality, flagOrg, flagOrgUnits)
 	sortableCredentialsFlags = []cli.Flag{
 		flagTestMode,

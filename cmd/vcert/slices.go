@@ -19,6 +19,7 @@ package main
 import (
 	"fmt"
 	"net"
+	"net/url"
 )
 
 type stringSlice []string
@@ -73,4 +74,23 @@ func (is *ipSlice) Set(value string) error {
 		return nil
 	}
 	return fmt.Errorf("Failed to convert %s to an IP Address", value)
+}
+
+type uriSlice []*url.URL
+
+func (uris *uriSlice) String() string {
+	var ret string
+	for _, s := range *uris {
+		ret += fmt.Sprintf("%s\n", s)
+	}
+	return ret
+}
+
+func (uris *uriSlice) Set(value string) error {
+	temp, err := url.Parse(value)
+	if err != nil {
+		return fmt.Errorf("Failed to parse %s to a URL", value)
+	}
+	*uris = append(*uris, temp)
+	return nil
 }
